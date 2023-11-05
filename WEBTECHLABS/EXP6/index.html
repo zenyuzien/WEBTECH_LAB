@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab exercise</title>
+</head>
+<body>
+    <h1>This is the default page</h1>
+    <input type="text" id="messageInput" placeholder="Enter a message"> 
+    <button id="getMessageButton">Get Message</button>
+    <p id="message"></p>
+<!-- JavaScript code to fetch and display the message -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    var messageInput = document.getElementById("messageInput");
+    var getMessageButton = document.getElementById("getMessageButton"); 
+    var messageDisplay = document.getElementById("message");
+
+    getMessageButton.addEventListener("click", function () { 
+        var message = messageInput.value; 
+        messageDisplay.textContent = "Loading...";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/api/message?message=" + message, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    messageDisplay.textContent = data.message;
+                } else {
+                    messageDisplay.textContent ="Error:" + xhr.statusText
+                }
+            }
+        };
+        xhr.send();
+    });
+});
+</script>
+</body>
+</html>
